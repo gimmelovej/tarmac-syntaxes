@@ -1,0 +1,104 @@
+{
+    "name": "Tarmac",
+    "scopeName": "source.tarmac",
+    "patterns": [
+        {
+            "include": "#comments"
+        },
+        {
+            "include": "#strings"
+        },
+        {
+            "include": "#characters"
+        },
+        {
+            "include": "#numbers"
+        },
+        {
+            "include": "#keywords"
+        },
+        {
+            "include": "#functions"
+        },
+        {
+            "include": "#operators"
+        },
+        {
+            "include": "#identifiers"
+        }
+    ],
+    "repository": {
+        "comments": {
+            "patterns": [
+                {
+                    "name": "comment.line.double-slash.tarmac",
+                    "match": "//.*$"
+                }
+            ]
+        },
+        "strings": {
+            "name": "string.quoted.double.tarmac",
+            "begin": "\"",
+            "end": "\"",
+            "patterns": [
+                {
+                    "name": "constant.character.escape.tarmac",
+                    "match": "\\\\[nt\"\\\\]"
+                }
+            ]
+        },
+        "characters": {
+            "name": "string.quoted.single.tarmac",
+            "match": "'[^']'"
+        },
+        "numbers": {
+            "patterns": [
+                {
+                    "name": "constant.numeric.tarmac",
+                    "match": "\\b[0-9]+(\\.[0-9]+)?\\b"
+                }
+            ]
+        },
+        "keywords": {
+            "patterns": [
+                {
+                    "name": "keyword.control.tarmac",
+                    "match": "\\b(if|else|return)\\b"
+                },
+                {
+                    "name": "storage.type.tarmac",
+                    "match": "\\b(string|char|int64|int|bool|float)\\b"
+                },
+                {
+                    "name": "constant.language.tarmac",
+                    "match": "\\b(true|false)\\b"
+                }
+            ]
+        },
+        "identifiers": {
+            "name": "variable.other.readwrite.tarmac",
+            "match": "\\b[a-zA-Z_][a-zA-Z0-9_]*\\b"
+        },
+        "functions": {
+            "comment": "chamada de função: nome(...) — Tarmac só tem funções nativas (print, atoi, mmap_alloc, mmap_free, brk_alloc), não há declaração de função pelo usuário",
+            "match": "\\b([A-Za-z_][A-Za-z0-9_]*)\\s*(?=\\()",
+            "name": "entity.name.function.call.tarmac"
+        },
+        "operators": {
+            "patterns": [
+                {
+                    "name": "keyword.operator.comparison.tarmac",
+                    "match": "==|<=|>=|<|>"
+                },
+                {
+                    "name": "keyword.operator.assignment.tarmac",
+                    "match": "="
+                },
+                {
+                    "name": "keyword.operator.arithmetic.tarmac",
+                    "match": "\\+|-|\\*|/"
+                }
+            ]
+        }
+    }
+}

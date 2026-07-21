@@ -1,0 +1,34 @@
+{
+  "name": "tarmac-syntax",
+  "displayName": "Tarmac Syntax Highlighting",
+  "description": "Syntax highlighting para a linguagem Tarmac",
+  "version": "0.0.1",
+  "publisher": "gimmelovej",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gimmelovej/tarmac-syntaxes"
+  },
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "categories": ["Programming Languages"],
+  "keywords": ["tarmac", "syntax highlighting", "compiler", "assembly"],
+  "contributes": {
+    "languages": [
+      {
+        "id": "tarmac",
+        "aliases": ["Tarmac", "tarmac"],
+        "extensions": [".tm", ".tarmac"],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "tarmac",
+        "scopeName": "source.tarmac",
+        "path": "./syntaxes/tarmac.tmLanguage.json"
+      }
+    ]
+  }
+}
