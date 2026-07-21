@@ -21,16 +21,7 @@ A gramática é mantida em sincronia com o que o *lexer* do compilador realmente
 
 ### Opção 1 — Marketplace (assim que publicada)
 
-1. Abra o VS Code.
-2. Vá em **Extensions** (`Ctrl+Shift+X`).
-3. Busque por **Tarmac Syntax Highlighting**.
-4. Clique em **Install**.
-
-Ou pelo terminal, depois de publicada:
-
-```bash
-code --install-extension gimmelovej.tarmac-syntax
-```
+A extensão ainda não está publicada, por hora, tente a opção listada abaixo.
 
 ### Opção 2 — Instalar manualmente a partir de um `.vsix`
 
