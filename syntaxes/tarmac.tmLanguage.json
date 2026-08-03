@@ -2,30 +2,17 @@
     "name": "Tarmac",
     "scopeName": "source.tarmac",
     "patterns": [
-        {
-            "include": "#comments"
-        },
-        {
-            "include": "#strings"
-        },
-        {
-            "include": "#characters"
-        },
-        {
-            "include": "#numbers"
-        },
-        {
-            "include": "#keywords"
-        },
-        {
-            "include": "#functions"
-        },
-        {
-            "include": "#operators"
-        },
-        {
-            "include": "#identifiers"
-        }
+        { "include": "#comments" },
+        { "include": "#strings" },
+        { "include": "#characters" },
+        { "include": "#numbers" },
+        { "include": "#function-definition" },
+        { "include": "#keywords" },
+        { "include": "#builtins" },
+        { "include": "#functions" },
+        { "include": "#operators" },
+        { "include": "#punctuation" },
+        { "include": "#identifiers" }
     ],
     "repository": {
         "comments": {
@@ -37,9 +24,10 @@
             ]
         },
         "strings": {
+            "comment": "end também para no fim da linha (lookahead \\n), não só em '\"' — evita que uma aspa esquecida enquanto o usuário digita vaze o escopo de string pelo resto do arquivo inteiro.",
             "name": "string.quoted.double.tarmac",
             "begin": "\"",
-            "end": "\"",
+            "end": "\"|(?=\\n)",
             "patterns": [
                 {
                     "name": "constant.character.escape.tarmac",
@@ -48,26 +36,46 @@
             ]
         },
         "characters": {
+            "comment": "literal de um único caractere entre aspas simples ('a'); o lexer aceita exatamente um caractere, sem escapes.",
             "name": "string.quoted.single.tarmac",
             "match": "'[^']'"
         },
         "numbers": {
+            "comment": "float precisa vir antes de integer: ambos casam no mesmo ponto de partida em '123.45', e o TextMate resolve empate de posição pela ordem no array, não pelo casamento mais longo — se integer viesse primeiro, cortaria a parte decimal.",
             "patterns": [
                 {
-                    "name": "constant.numeric.tarmac",
-                    "match": "\\b[0-9]+(\\.[0-9]+)?\\b"
+                    "name": "constant.numeric.float.tarmac",
+                    "match": "\\b[0-9]+\\.[0-9]+\\b"
+                },
+                {
+                    "name": "constant.numeric.integer.tarmac",
+                    "match": "\\b[0-9]+\\b"
                 }
             ]
+        },
+        "function-definition": {
+            "comment": "declaração de função: '<tipo> function <nome>(...)'. Casa a palavra-chave 'function' e o nome logo depois, destacando o nome como definição. O tipo de retorno antes de 'function' é destacado por #keywords (storage.type). Precisa vir antes de #keywords para capturar o par 'function <nome>' de uma vez.",
+            "match": "\\b(function)\\s+([A-Za-z_][A-Za-z0-9_]*)",
+            "captures": {
+                "1": { "name": "storage.type.function.tarmac" },
+                "2": { "name": "entity.name.function.tarmac" }
+            }
         },
         "keywords": {
             "patterns": [
                 {
+                    "comment": "controle de fluxo reconhecido pelo parser: if/else, o laço while e return (todos com nó de AST e regra de parser própria).",
                     "name": "keyword.control.tarmac",
-                    "match": "\\b(if|else|return)\\b"
+                    "match": "\\b(if|else|while|return)\\b"
+                },
+                {
+                    "comment": "'function' isolado (sem um nome logo em seguida) — a declaração completa é tratada por #function-definition, que vem antes.",
+                    "name": "storage.type.function.tarmac",
+                    "match": "\\b(function)\\b"
                 },
                 {
                     "name": "storage.type.tarmac",
-                    "match": "\\b(string|char|int64|int|bool|float)\\b"
+                    "match": "\\b(string|char|int64|int|bool|float|buffer)\\b"
                 },
                 {
                     "name": "constant.language.tarmac",
@@ -75,20 +83,26 @@
                 }
             ]
         },
+        "builtins": {
+            "comment": "funções nativas do runtime (ver a FunctionTable do compilador). Destacadas com escopo próprio (support.function.builtin) e antes de #functions para se distinguirem de chamadas a funções definidas pelo usuário. O lookahead '(' garante que só o uso como chamada seja destacado.",
+            "match": "\\b(print|atoi|read_buf|emit_note|mmap_alloc|mmap_free|brk_alloc|brk_free)\\b(?=\\s*\\()",
+            "name": "support.function.builtin.tarmac"
+        },
+        "functions": {
+            "comment": "chamada de função ou método: <nome>( — inclui o nome de um método como em 'buf.str()' (o 'str', seguido de '('). Regra puramente léxica: destaca qualquer identificador seguido de '(', mesmo que não exista de fato; uma validação real exigiria um language server.",
+            "match": "\\b([A-Za-z_][A-Za-z0-9_]*)\\s*(?=\\()",
+            "name": "entity.name.function.call.tarmac"
+        },
         "identifiers": {
             "name": "variable.other.readwrite.tarmac",
             "match": "\\b[a-zA-Z_][a-zA-Z0-9_]*\\b"
         },
-        "functions": {
-            "comment": "chamada de função: nome(...) — Tarmac só tem funções nativas (print, atoi, mmap_alloc, mmap_free, brk_alloc), não há declaração de função pelo usuário",
-            "match": "\\b([A-Za-z_][A-Za-z0-9_]*)\\s*(?=\\()",
-            "name": "entity.name.function.call.tarmac"
-        },
         "operators": {
             "patterns": [
                 {
+                    "comment": "operadores de 2 caracteres sempre antes dos de 1 — a alternância do Oniguruma testa em ordem de leitura e para no primeiro que casar, não no mais longo, então essa ordem não é cosmética.",
                     "name": "keyword.operator.comparison.tarmac",
-                    "match": "==|<=|>=|<|>"
+                    "match": ">=|<=|==|<|>"
                 },
                 {
                     "name": "keyword.operator.assignment.tarmac",
@@ -97,6 +111,39 @@
                 {
                     "name": "keyword.operator.arithmetic.tarmac",
                     "match": "\\+|-|\\*|/"
+                }
+            ]
+        },
+        "punctuation": {
+            "patterns": [
+                {
+                    "comment": "acessor de método ('.'): o '.' de um float (3.14) já foi consumido por #numbers, que vem antes no array de topo, então aqui sobra só o '.' de acesso a método (buf.str()).",
+                    "name": "punctuation.accessor.tarmac",
+                    "match": "\\."
+                },
+                {
+                    "name": "punctuation.terminator.statement.tarmac",
+                    "match": ";"
+                },
+                {
+                    "name": "punctuation.separator.comma.tarmac",
+                    "match": ","
+                },
+                {
+                    "name": "punctuation.section.block.begin.tarmac",
+                    "match": "\\{"
+                },
+                {
+                    "name": "punctuation.section.block.end.tarmac",
+                    "match": "\\}"
+                },
+                {
+                    "name": "punctuation.section.parens.begin.tarmac",
+                    "match": "\\("
+                },
+                {
+                    "name": "punctuation.section.parens.end.tarmac",
+                    "match": "\\)"
                 }
             ]
         }
