@@ -25,6 +25,11 @@ método nativo `len()`, e deixou de expor `read_buf` e o método `str()`.
 - `fixtures/showcase.tm` reescrito para a sintaxe atual (arrays, atribuições compostas, menos
   unário, `len()`, escapes novos, condição sem parênteses) e snapshot regravado.
 - Documentação (`README.md`, `CONTRIBUTING.md`) atualizada para o estado atual da linguagem.
+- Workflow de release: a publicação no Marketplace/Open VSX virou **opcional** — cada passo só
+  roda se o secret correspondente (`VSCE_PAT`/`OVSX_PAT`) estiver configurado. Sem eles, a
+  release ainda valida, empacota e anexa o `.vsix` à GitHub Release (por ora, o único canal de
+  distribuição). O job também ganhou `permissions: contents: write`, exigido para criar a
+  GitHub Release.
 
 ### Removido
 - `read_buf` da lista de nativas: não é mais registrada na `FunctionTable` do compilador (a rotina

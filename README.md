@@ -36,7 +36,7 @@ A gramática é mantida em sincronia com o que o *lexer* do compilador realmente
 
 ### Opção 1 — Marketplace / Open VSX (assim que publicada)
 
-Ainda não publicada. Quando sair, vai estar disponível em dois lugares (mesmo `.vsix`, dois registros diferentes):
+Ainda não publicada — por ora, a distribuição oficial é o `.vsix` anexado às [releases no GitHub](https://github.com/gimmelovej/tarmac-syntaxes/releases) (Opção 2 abaixo). Quando a publicação sair, vai estar disponível em dois lugares (mesmo `.vsix`, dois registros diferentes):
 
 - [Visual Studio Marketplace](https://marketplace.visualstudio.com/) — VS Code oficial.
 - [Open VSX Registry](https://open-vsx.org/) — VSCodium, code-server, Gitpod, Cursor, Windsurf e outros forks sem acesso ao Marketplace da Microsoft.
