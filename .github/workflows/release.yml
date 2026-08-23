@@ -1,9 +1,14 @@
 name: Release
 
-# Disparado por uma tag "vX.Y.Z" (ex.: v0.0.2). Publica no Marketplace do VS Code e no
-# Open VSX Registry (necessário para VSCodium, code-server, Gitpod, Cursor e outros forks
-# sem acesso ao Marketplace da Microsoft). Requer os secrets VSCE_PAT e OVSX_PAT configurados
-# em Settings > Secrets and variables > Actions antes do primeiro uso.
+# Disparado por uma tag "vX.Y.Z" (ex.: v0.2.0). Sempre valida, empacota e anexa o .vsix à
+# GitHub Release. A publicação no Marketplace do VS Code e no Open VSX Registry (necessário
+# para VSCodium, code-server, Gitpod, Cursor e outros forks sem acesso ao Marketplace da
+# Microsoft) é OPCIONAL: cada passo só roda se o secret correspondente (VSCE_PAT / OVSX_PAT)
+# estiver configurado em Settings > Secrets and variables > Actions — sem eles, a release
+# é apenas o arquivo .vsix no GitHub.
+#
+# Os secrets são expostos como env do job porque o contexto `secrets` não é confiável dentro
+# de `if` de passo; testar `env.X != ''` é o padrão suportado.
 
 on:
   push:
@@ -13,6 +18,11 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # criar a GitHub Release e anexar o .vsix
+    env:
+      VSCE_PAT: ${{ secrets.VSCE_PAT }}
+      OVSX_PAT: ${{ secrets.OVSX_PAT }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -24,13 +34,11 @@ jobs:
       - run: npm test
       - run: npx vsce package
       - name: Publicar no Visual Studio Marketplace
+        if: env.VSCE_PAT != ''
         run: npx vsce publish -p "$VSCE_PAT"
-        env:
-          VSCE_PAT: ${{ secrets.VSCE_PAT }}
       - name: Publicar no Open VSX Registry
+        if: env.OVSX_PAT != ''
         run: npx ovsx publish *.vsix -p "$OVSX_PAT"
-        env:
-          OVSX_PAT: ${{ secrets.OVSX_PAT }}
       - name: Anexar .vsix à GitHub Release
         uses: softprops/action-gh-release@v2
         with:
