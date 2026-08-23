@@ -2,6 +2,36 @@
 
 Todas as mudanças notáveis deste projeto são documentadas aqui. Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/); este projeto ainda está em **beta** (pré-1.0), então a numeração `0.x` pode incluir mudanças incompatíveis entre versões menores.
 
+## [0.2.0] - 2026-08-23
+
+Atualiza a gramática para o compilador Tarmac atual (a releitura em C) — que ganhou **atribuições
+compostas** (`+=`, `-=`, `*=`, `/=`), **menos unário**, **arrays** (novo, em desenvolvimento) e o
+método nativo `len()`, e deixou de expor `read_buf` e o método `str()`.
+
+### Adicionado
+- Atribuições compostas `+=`, `-=`, `*=`, `/=` com escopo próprio
+  (`keyword.operator.assignment.compound`), posicionadas antes dos aritméticos de 1 caractere na
+  alternância — mesma armadilha de ordem já documentada para os comparadores.
+- Colchetes de array `[`/`]` (`punctuation.section.brackets.begin`/`.end`), usados no tamanho da
+  declaração (`int[3] v`) e na indexação (`v[0]`). Também entraram em `brackets`,
+  `autoClosingPairs` e `surroundingPairs` da `language-configuration.json`.
+- Escapes `\r`, `\0` e `\'` em strings — o conjunto agora espelha `is_valid_escape` do lexer
+  (`n`, `t`, `r`, `0`, `\`, `"`, `'`).
+- Escape em literal de caractere (`'\n'`), destacado com o mesmo escopo dos escapes de string
+  (antes só um caractere literal era reconhecido).
+- Nativa `len` (método de `string`: `nome.len()`) na lista de `support.function.builtin`.
+
+### Alterado
+- `fixtures/showcase.tm` reescrito para a sintaxe atual (arrays, atribuições compostas, menos
+  unário, `len()`, escapes novos, condição sem parênteses) e snapshot regravado.
+- Documentação (`README.md`, `CONTRIBUTING.md`) atualizada para o estado atual da linguagem.
+
+### Removido
+- `read_buf` da lista de nativas: não é mais registrada na `FunctionTable` do compilador (a rotina
+  `tarm_read_buf` ainda existe na runtime, mas não é alcançável pela linguagem). O método `str()`
+  saiu dos exemplos pelo mesmo motivo. Já `buffer` **continua** destacado como tipo, porque o lexer
+  ainda o reconhece como palavra-chave (`KwBuffer`) — a promessa da extensão é espelhar o lexer.
+
 ## [0.1.0] - 2026-08-03
 
 Atualiza a gramática para acompanhar a linguagem Tarmac atual — que passou a compilar de ponta a

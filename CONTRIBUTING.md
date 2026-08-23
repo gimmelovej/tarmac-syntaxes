@@ -30,7 +30,8 @@ Pressione `F5` no VS Code para abrir uma janela de "Extension Development Host" 
 
 ## Ordem importa
 
-Duas armadilhas conhecidas nesta gramática (documentadas com `"comment"` no próprio JSON):
+Três armadilhas conhecidas nesta gramática (documentadas com `"comment"` no próprio JSON):
 
 - `numbers`: o padrão de `float` precisa vir antes do de `integer`, senão a parte decimal de `3.14` é cortada.
 - `operators`: operadores de comparação de 2 caracteres (`>=`, `<=`, `==`) precisam vir antes de qualquer operador de 1 caractere que os "contenha" (`<`, `>`), porque o motor de regex testa alternativas em ordem de leitura, não por comprimento.
+- `operators`: pela mesma regra, as atribuições compostas (`+=`, `-=`, `*=`, `/=`) precisam vir antes dos aritméticos de 1 caractere — senão o `+` de `+=` é consumido sozinho e sobra um `=` de atribuição simples.

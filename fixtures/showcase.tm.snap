@@ -26,6 +26,28 @@
 #                              ^^ source.tarmac string.quoted.double.tarmac constant.character.escape.tarmac
 #                                ^ source.tarmac string.quoted.double.tarmac
 #                                 ^ source.tarmac punctuation.terminator.statement.tarmac
+>string escapes = "tab:\t cr:\r nulo:\0 aspas:\" apostrofo:\' barra:\\";
+#^^^^^^ source.tarmac storage.type.tarmac
+#      ^ source.tarmac
+#       ^^^^^^^ source.tarmac variable.other.readwrite.tarmac
+#              ^ source.tarmac
+#               ^ source.tarmac keyword.operator.assignment.tarmac
+#                ^ source.tarmac
+#                 ^ source.tarmac string.quoted.double.tarmac
+#                  ^^^^ source.tarmac string.quoted.double.tarmac
+#                      ^^ source.tarmac string.quoted.double.tarmac constant.character.escape.tarmac
+#                        ^^^^ source.tarmac string.quoted.double.tarmac
+#                            ^^ source.tarmac string.quoted.double.tarmac constant.character.escape.tarmac
+#                              ^^^^^^ source.tarmac string.quoted.double.tarmac
+#                                    ^^ source.tarmac string.quoted.double.tarmac constant.character.escape.tarmac
+#                                      ^^^^^^^ source.tarmac string.quoted.double.tarmac
+#                                             ^^ source.tarmac string.quoted.double.tarmac constant.character.escape.tarmac
+#                                               ^^^^^^^^^^^ source.tarmac string.quoted.double.tarmac
+#                                                          ^^ source.tarmac string.quoted.double.tarmac constant.character.escape.tarmac
+#                                                            ^^^^^^^ source.tarmac string.quoted.double.tarmac
+#                                                                   ^^ source.tarmac string.quoted.double.tarmac constant.character.escape.tarmac
+#                                                                     ^ source.tarmac string.quoted.double.tarmac
+#                                                                      ^ source.tarmac punctuation.terminator.statement.tarmac
 >
 >// função definida pelo usuário, com parâmetro e retorno
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.tarmac comment.line.double-slash.tarmac
@@ -42,7 +64,7 @@
 #                        ^ source.tarmac punctuation.section.parens.end.tarmac
 #                         ^ source.tarmac
 #                          ^ source.tarmac punctuation.section.block.begin.tarmac
->    return n + 2;
+>    return n * 2;
 #^^^^ source.tarmac
 #    ^^^^^^ source.tarmac keyword.control.tarmac
 #          ^ source.tarmac
@@ -105,6 +127,20 @@
 #                  ^ source.tarmac
 #                   ^^^ source.tarmac string.quoted.single.tarmac
 #                      ^ source.tarmac punctuation.terminator.statement.tarmac
+>    char quebra = '\n';           // literal de caractere com escape
+#^^^^ source.tarmac
+#    ^^^^ source.tarmac storage.type.tarmac
+#        ^ source.tarmac
+#         ^^^^^^ source.tarmac variable.other.readwrite.tarmac
+#               ^ source.tarmac
+#                ^ source.tarmac keyword.operator.assignment.tarmac
+#                 ^ source.tarmac
+#                  ^ source.tarmac string.quoted.single.tarmac
+#                   ^^ source.tarmac string.quoted.single.tarmac constant.character.escape.tarmac
+#                     ^ source.tarmac string.quoted.single.tarmac
+#                      ^ source.tarmac punctuation.terminator.statement.tarmac
+#                       ^^^^^^^^^^^ source.tarmac
+#                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.tarmac comment.line.double-slash.tarmac
 >
 >    contador = contador + 1;
 #^^^^ source.tarmac
@@ -119,19 +155,20 @@
 #                          ^ source.tarmac constant.numeric.integer.tarmac
 #                           ^ source.tarmac punctuation.terminator.statement.tarmac
 >
->    if (contador > 0) {
+>    // parênteses na condição são opcionais (mas continuam aceitos)
+#^^^^ source.tarmac
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.tarmac comment.line.double-slash.tarmac
+>    if contador > 0 {
 #^^^^ source.tarmac
 #    ^^ source.tarmac keyword.control.tarmac
 #      ^ source.tarmac
-#       ^ source.tarmac punctuation.section.parens.begin.tarmac
-#        ^^^^^^^^ source.tarmac variable.other.readwrite.tarmac
-#                ^ source.tarmac
-#                 ^ source.tarmac keyword.operator.comparison.tarmac
-#                  ^ source.tarmac
-#                   ^ source.tarmac constant.numeric.integer.tarmac
-#                    ^ source.tarmac punctuation.section.parens.end.tarmac
-#                     ^ source.tarmac
-#                      ^ source.tarmac punctuation.section.block.begin.tarmac
+#       ^^^^^^^^ source.tarmac variable.other.readwrite.tarmac
+#               ^ source.tarmac
+#                ^ source.tarmac keyword.operator.comparison.tarmac
+#                 ^ source.tarmac
+#                  ^ source.tarmac constant.numeric.integer.tarmac
+#                   ^ source.tarmac
+#                    ^ source.tarmac punctuation.section.block.begin.tarmac
 >        print(mensagem);
 #^^^^^^^^ source.tarmac
 #        ^^^^^ source.tarmac support.function.builtin.tarmac
@@ -170,72 +207,137 @@
 #           ^ source.tarmac
 #            ^ source.tarmac constant.numeric.integer.tarmac
 #             ^ source.tarmac punctuation.terminator.statement.tarmac
->    while (i < 3) {
+>    while (i <= 3) {
 #^^^^ source.tarmac
 #    ^^^^^ source.tarmac keyword.control.tarmac
 #         ^ source.tarmac
 #          ^ source.tarmac punctuation.section.parens.begin.tarmac
 #           ^ source.tarmac variable.other.readwrite.tarmac
 #            ^ source.tarmac
-#             ^ source.tarmac keyword.operator.comparison.tarmac
-#              ^ source.tarmac
-#               ^ source.tarmac constant.numeric.integer.tarmac
-#                ^ source.tarmac punctuation.section.parens.end.tarmac
-#                 ^ source.tarmac
-#                  ^ source.tarmac punctuation.section.block.begin.tarmac
->        print(i);
+#             ^^ source.tarmac keyword.operator.comparison.tarmac
+#               ^ source.tarmac
+#                ^ source.tarmac constant.numeric.integer.tarmac
+#                 ^ source.tarmac punctuation.section.parens.end.tarmac
+#                  ^ source.tarmac
+#                   ^ source.tarmac punctuation.section.block.begin.tarmac
+>        print(-i);                // menos unário
 #^^^^^^^^ source.tarmac
 #        ^^^^^ source.tarmac support.function.builtin.tarmac
 #             ^ source.tarmac punctuation.section.parens.begin.tarmac
-#              ^ source.tarmac variable.other.readwrite.tarmac
-#               ^ source.tarmac punctuation.section.parens.end.tarmac
-#                ^ source.tarmac punctuation.terminator.statement.tarmac
->        i = i + 1;
+#              ^ source.tarmac keyword.operator.arithmetic.tarmac
+#               ^ source.tarmac variable.other.readwrite.tarmac
+#                ^ source.tarmac punctuation.section.parens.end.tarmac
+#                 ^ source.tarmac punctuation.terminator.statement.tarmac
+#                  ^^^^^^^^^^^^^^^^ source.tarmac
+#                                  ^^^^^^^^^^^^^^^ source.tarmac comment.line.double-slash.tarmac
+>        i += 1;                   // atribuição composta
 #^^^^^^^^ source.tarmac
 #        ^ source.tarmac variable.other.readwrite.tarmac
 #         ^ source.tarmac
-#          ^ source.tarmac keyword.operator.assignment.tarmac
-#           ^ source.tarmac
-#            ^ source.tarmac variable.other.readwrite.tarmac
-#             ^ source.tarmac
-#              ^ source.tarmac keyword.operator.arithmetic.tarmac
-#               ^ source.tarmac
-#                ^ source.tarmac constant.numeric.integer.tarmac
-#                 ^ source.tarmac punctuation.terminator.statement.tarmac
+#          ^^ source.tarmac keyword.operator.assignment.compound.tarmac
+#            ^ source.tarmac
+#             ^ source.tarmac constant.numeric.integer.tarmac
+#              ^ source.tarmac punctuation.terminator.statement.tarmac
+#               ^^^^^^^^^^^^^^^^^^^ source.tarmac
+#                                  ^^^^^^^^^^^^^^^^^^^^^^ source.tarmac comment.line.double-slash.tarmac
 >    }
 #^^^^ source.tarmac
 #    ^ source.tarmac punctuation.section.block.end.tarmac
 >
->    buffer conteudo = read_buf("dados.txt");
+>    // arrays (novo): tamanho colado ao tipo, inicializador só na declaração
 #^^^^ source.tarmac
-#    ^^^^^^ source.tarmac storage.type.tarmac
-#          ^ source.tarmac
-#           ^^^^^^^^ source.tarmac variable.other.readwrite.tarmac
-#                   ^ source.tarmac
-#                    ^ source.tarmac keyword.operator.assignment.tarmac
-#                     ^ source.tarmac
-#                      ^^^^^^^^ source.tarmac support.function.builtin.tarmac
-#                              ^ source.tarmac punctuation.section.parens.begin.tarmac
-#                               ^ source.tarmac string.quoted.double.tarmac
-#                                ^^^^^^^^^ source.tarmac string.quoted.double.tarmac
-#                                         ^ source.tarmac string.quoted.double.tarmac
-#                                          ^ source.tarmac punctuation.section.parens.end.tarmac
-#                                           ^ source.tarmac punctuation.terminator.statement.tarmac
->    string texto = conteudo.str();
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.tarmac comment.line.double-slash.tarmac
+>    int[3] medidas = { 10, 20, 30 };
 #^^^^ source.tarmac
-#    ^^^^^^ source.tarmac storage.type.tarmac
+#    ^^^ source.tarmac storage.type.tarmac
+#       ^ source.tarmac punctuation.section.brackets.begin.tarmac
+#        ^ source.tarmac constant.numeric.integer.tarmac
+#         ^ source.tarmac punctuation.section.brackets.end.tarmac
 #          ^ source.tarmac
-#           ^^^^^ source.tarmac variable.other.readwrite.tarmac
-#                ^ source.tarmac
-#                 ^ source.tarmac keyword.operator.assignment.tarmac
+#           ^^^^^^^ source.tarmac variable.other.readwrite.tarmac
 #                  ^ source.tarmac
-#                   ^^^^^^^^ source.tarmac variable.other.readwrite.tarmac
-#                           ^ source.tarmac punctuation.accessor.tarmac
-#                            ^^^ source.tarmac entity.name.function.call.tarmac
-#                               ^ source.tarmac punctuation.section.parens.begin.tarmac
-#                                ^ source.tarmac punctuation.section.parens.end.tarmac
-#                                 ^ source.tarmac punctuation.terminator.statement.tarmac
->    int64 tamanho = conteudo.len();
+#                   ^ source.tarmac keyword.operator.assignment.tarmac
+#                    ^ source.tarmac
+#                     ^ source.tarmac punctuation.section.block.begin.tarmac
+#                      ^ source.tarmac
+#                       ^^ source.tarmac constant.numeric.integer.tarmac
+#                         ^ source.tarmac punctuation.separator.comma.tarmac
+#                          ^ source.tarmac
+#                           ^^ source.tarmac constant.numeric.integer.tarmac
+#                             ^ source.tarmac punctuation.separator.comma.tarmac
+#                              ^ source.tarmac
+#                               ^^ source.tarmac constant.numeric.integer.tarmac
+#                                 ^ source.tarmac
+#                                  ^ source.tarmac punctuation.section.block.end.tarmac
+#                                   ^ source.tarmac punctuation.terminator.statement.tarmac
+>    medidas[1] = 99;
+#^^^^ source.tarmac
+#    ^^^^^^^ source.tarmac variable.other.readwrite.tarmac
+#           ^ source.tarmac punctuation.section.brackets.begin.tarmac
+#            ^ source.tarmac constant.numeric.integer.tarmac
+#             ^ source.tarmac punctuation.section.brackets.end.tarmac
+#              ^ source.tarmac
+#               ^ source.tarmac keyword.operator.assignment.tarmac
+#                ^ source.tarmac
+#                 ^^ source.tarmac constant.numeric.integer.tarmac
+#                   ^ source.tarmac punctuation.terminator.statement.tarmac
+>    medidas[0] += 100;
+#^^^^ source.tarmac
+#    ^^^^^^^ source.tarmac variable.other.readwrite.tarmac
+#           ^ source.tarmac punctuation.section.brackets.begin.tarmac
+#            ^ source.tarmac constant.numeric.integer.tarmac
+#             ^ source.tarmac punctuation.section.brackets.end.tarmac
+#              ^ source.tarmac
+#               ^^ source.tarmac keyword.operator.assignment.compound.tarmac
+#                 ^ source.tarmac
+#                  ^^^ source.tarmac constant.numeric.integer.tarmac
+#                     ^ source.tarmac punctuation.terminator.statement.tarmac
+>    print(medidas[2]);
+#^^^^ source.tarmac
+#    ^^^^^ source.tarmac support.function.builtin.tarmac
+#         ^ source.tarmac punctuation.section.parens.begin.tarmac
+#          ^^^^^^^ source.tarmac variable.other.readwrite.tarmac
+#                 ^ source.tarmac punctuation.section.brackets.begin.tarmac
+#                  ^ source.tarmac constant.numeric.integer.tarmac
+#                   ^ source.tarmac punctuation.section.brackets.end.tarmac
+#                    ^ source.tarmac punctuation.section.parens.end.tarmac
+#                     ^ source.tarmac punctuation.terminator.statement.tarmac
+>
+>    char[2] iniciais = { 'T', 'm' };
+#^^^^ source.tarmac
+#    ^^^^ source.tarmac storage.type.tarmac
+#        ^ source.tarmac punctuation.section.brackets.begin.tarmac
+#         ^ source.tarmac constant.numeric.integer.tarmac
+#          ^ source.tarmac punctuation.section.brackets.end.tarmac
+#           ^ source.tarmac
+#            ^^^^^^^^ source.tarmac variable.other.readwrite.tarmac
+#                    ^ source.tarmac
+#                     ^ source.tarmac keyword.operator.assignment.tarmac
+#                      ^ source.tarmac
+#                       ^ source.tarmac punctuation.section.block.begin.tarmac
+#                        ^ source.tarmac
+#                         ^^^ source.tarmac string.quoted.single.tarmac
+#                            ^ source.tarmac punctuation.separator.comma.tarmac
+#                             ^ source.tarmac
+#                              ^^^ source.tarmac string.quoted.single.tarmac
+#                                 ^ source.tarmac
+#                                  ^ source.tarmac punctuation.section.block.end.tarmac
+#                                   ^ source.tarmac punctuation.terminator.statement.tarmac
+>    print(iniciais[0]);
+#^^^^ source.tarmac
+#    ^^^^^ source.tarmac support.function.builtin.tarmac
+#         ^ source.tarmac punctuation.section.parens.begin.tarmac
+#          ^^^^^^^^ source.tarmac variable.other.readwrite.tarmac
+#                  ^ source.tarmac punctuation.section.brackets.begin.tarmac
+#                   ^ source.tarmac constant.numeric.integer.tarmac
+#                    ^ source.tarmac punctuation.section.brackets.end.tarmac
+#                     ^ source.tarmac punctuation.section.parens.end.tarmac
+#                      ^ source.tarmac punctuation.terminator.statement.tarmac
+>
+>    // método de tipo: len() devolve o comprimento em bytes
+#^^^^ source.tarmac
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.tarmac comment.line.double-slash.tarmac
+>    int64 tamanho = mensagem.len();
 #^^^^ source.tarmac
 #    ^^^^^ source.tarmac storage.type.tarmac
 #         ^ source.tarmac
@@ -245,18 +347,67 @@
 #                   ^ source.tarmac
 #                    ^^^^^^^^ source.tarmac variable.other.readwrite.tarmac
 #                            ^ source.tarmac punctuation.accessor.tarmac
-#                             ^^^ source.tarmac entity.name.function.call.tarmac
+#                             ^^^ source.tarmac support.function.builtin.tarmac
 #                                ^ source.tarmac punctuation.section.parens.begin.tarmac
 #                                 ^ source.tarmac punctuation.section.parens.end.tarmac
 #                                  ^ source.tarmac punctuation.terminator.statement.tarmac
->    print(texto);
+>    if tamanho >= 6 {
 #^^^^ source.tarmac
-#    ^^^^^ source.tarmac support.function.builtin.tarmac
-#         ^ source.tarmac punctuation.section.parens.begin.tarmac
-#          ^^^^^ source.tarmac variable.other.readwrite.tarmac
-#               ^ source.tarmac punctuation.section.parens.end.tarmac
-#                ^ source.tarmac punctuation.terminator.statement.tarmac
+#    ^^ source.tarmac keyword.control.tarmac
+#      ^ source.tarmac
+#       ^^^^^^^ source.tarmac variable.other.readwrite.tarmac
+#              ^ source.tarmac
+#               ^^ source.tarmac keyword.operator.comparison.tarmac
+#                 ^ source.tarmac
+#                  ^ source.tarmac constant.numeric.integer.tarmac
+#                   ^ source.tarmac
+#                    ^ source.tarmac punctuation.section.block.begin.tarmac
+>        print(tamanho);
+#^^^^^^^^ source.tarmac
+#        ^^^^^ source.tarmac support.function.builtin.tarmac
+#             ^ source.tarmac punctuation.section.parens.begin.tarmac
+#              ^^^^^^^ source.tarmac variable.other.readwrite.tarmac
+#                     ^ source.tarmac punctuation.section.parens.end.tarmac
+#                      ^ source.tarmac punctuation.terminator.statement.tarmac
+>    }
+#^^^^ source.tarmac
+#    ^ source.tarmac punctuation.section.block.end.tarmac
 >
+>    // as demais atribuições compostas
+#^^^^ source.tarmac
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.tarmac comment.line.double-slash.tarmac
+>    contador -= 1;
+#^^^^ source.tarmac
+#    ^^^^^^^^ source.tarmac variable.other.readwrite.tarmac
+#            ^ source.tarmac
+#             ^^ source.tarmac keyword.operator.assignment.compound.tarmac
+#               ^ source.tarmac
+#                ^ source.tarmac constant.numeric.integer.tarmac
+#                 ^ source.tarmac punctuation.terminator.statement.tarmac
+>    contador *= 2 + 3;
+#^^^^ source.tarmac
+#    ^^^^^^^^ source.tarmac variable.other.readwrite.tarmac
+#            ^ source.tarmac
+#             ^^ source.tarmac keyword.operator.assignment.compound.tarmac
+#               ^ source.tarmac
+#                ^ source.tarmac constant.numeric.integer.tarmac
+#                 ^ source.tarmac
+#                  ^ source.tarmac keyword.operator.arithmetic.tarmac
+#                   ^ source.tarmac
+#                    ^ source.tarmac constant.numeric.integer.tarmac
+#                     ^ source.tarmac punctuation.terminator.statement.tarmac
+>    contador /= 4;
+#^^^^ source.tarmac
+#    ^^^^^^^^ source.tarmac variable.other.readwrite.tarmac
+#            ^ source.tarmac
+#             ^^ source.tarmac keyword.operator.assignment.compound.tarmac
+#               ^ source.tarmac
+#                ^ source.tarmac constant.numeric.integer.tarmac
+#                 ^ source.tarmac punctuation.terminator.statement.tarmac
+>
+>    // nativas do runtime e chamada a função do usuário
+#^^^^ source.tarmac
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.tarmac comment.line.double-slash.tarmac
 >    print(dobro(contador));
 #^^^^ source.tarmac
 #    ^^^^^ source.tarmac support.function.builtin.tarmac
@@ -292,6 +443,51 @@
 #                         ^^^ source.tarmac constant.numeric.integer.tarmac
 #                            ^ source.tarmac punctuation.section.parens.end.tarmac
 #                             ^ source.tarmac punctuation.terminator.statement.tarmac
+>
+>    int64 bloco = brk_alloc(64);
+#^^^^ source.tarmac
+#    ^^^^^ source.tarmac storage.type.tarmac
+#         ^ source.tarmac
+#          ^^^^^ source.tarmac variable.other.readwrite.tarmac
+#               ^ source.tarmac
+#                ^ source.tarmac keyword.operator.assignment.tarmac
+#                 ^ source.tarmac
+#                  ^^^^^^^^^ source.tarmac support.function.builtin.tarmac
+#                           ^ source.tarmac punctuation.section.parens.begin.tarmac
+#                            ^^ source.tarmac constant.numeric.integer.tarmac
+#                              ^ source.tarmac punctuation.section.parens.end.tarmac
+#                               ^ source.tarmac punctuation.terminator.statement.tarmac
+>    brk_free(bloco);
+#^^^^ source.tarmac
+#    ^^^^^^^^ source.tarmac support.function.builtin.tarmac
+#            ^ source.tarmac punctuation.section.parens.begin.tarmac
+#             ^^^^^ source.tarmac variable.other.readwrite.tarmac
+#                  ^ source.tarmac punctuation.section.parens.end.tarmac
+#                   ^ source.tarmac punctuation.terminator.statement.tarmac
+>    int64 regiao = mmap_alloc(4096);
+#^^^^ source.tarmac
+#    ^^^^^ source.tarmac storage.type.tarmac
+#         ^ source.tarmac
+#          ^^^^^^ source.tarmac variable.other.readwrite.tarmac
+#                ^ source.tarmac
+#                 ^ source.tarmac keyword.operator.assignment.tarmac
+#                  ^ source.tarmac
+#                   ^^^^^^^^^^ source.tarmac support.function.builtin.tarmac
+#                             ^ source.tarmac punctuation.section.parens.begin.tarmac
+#                              ^^^^ source.tarmac constant.numeric.integer.tarmac
+#                                  ^ source.tarmac punctuation.section.parens.end.tarmac
+#                                   ^ source.tarmac punctuation.terminator.statement.tarmac
+>    mmap_free(regiao, 4096);
+#^^^^ source.tarmac
+#    ^^^^^^^^^ source.tarmac support.function.builtin.tarmac
+#             ^ source.tarmac punctuation.section.parens.begin.tarmac
+#              ^^^^^^ source.tarmac variable.other.readwrite.tarmac
+#                    ^ source.tarmac punctuation.separator.comma.tarmac
+#                     ^ source.tarmac
+#                      ^^^^ source.tarmac constant.numeric.integer.tarmac
+#                          ^ source.tarmac punctuation.section.parens.end.tarmac
+#                           ^ source.tarmac punctuation.terminator.statement.tarmac
+>
 >    return 0;
 #^^^^ source.tarmac
 #    ^^^^^^ source.tarmac keyword.control.tarmac
