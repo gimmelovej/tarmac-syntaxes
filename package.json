@@ -2,7 +2,7 @@
   "name": "tarmac-syntax",
   "displayName": "Tarmac Syntax Highlighting",
   "description": "Syntax highlighting para a linguagem Tarmac (beta)",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "publisher": "gimmelovej",
   "license": "MIT",
   "icon": "images/icon.png",
