@@ -4,11 +4,12 @@ Extensão do VS Code que adiciona *syntax highlighting* para [Tarmac](https://gi
 
 Esta extensão **não** inclui compilador, *linter* ou *debugger* — apenas coloração de sintaxe e configuração básica de edição (comentários, fechamento automático de parênteses/aspas). Para compilar e executar código Tarmac, use o [compilador oficial](https://github.com/gimmelovej/tarmac).
 
-> ⚠️ **Beta, em desenvolvimento ativo.** A extensão está na versão `0.1.0` e sua gramática acompanha
+> ⚠️ **Beta, em desenvolvimento ativo.** A extensão está na versão `0.2.0` e sua gramática acompanha
 > a linguagem, que ainda evolui — recursos podem ser adicionados ou ajustados entre versões. O Tarmac
-> (linguagem/compilador) também está em beta: hoje compila de ponta a ponta funções (com parâmetros e
-> `return`), variáveis locais e globais, `if`/`else`, o laço `while`, o tipo `buffer` e métodos — mas
-> ainda tem limitações conhecidas (veja [Estado do desenvolvimento](https://github.com/gimmelovej/tarmac#estado-do-desenvolvimento)
+> (linguagem/compilador, hoje reescrito em C) também está em beta: compila de ponta a ponta funções
+> (com parâmetros e `return`), variáveis locais e globais, `if`/`else`, o laço `while`, o método
+> `len()`, menos unário, atribuições compostas (`+=`, `-=`, `*=`, `/=`) e arrays (novo, em
+> desenvolvimento) — mas ainda tem limitações conhecidas (veja [Estado do desenvolvimento](https://github.com/gimmelovej/tarmac#estado-do-desenvolvimento)
 > no repositório do compilador).
 >
 > Esta extensão apenas **destaca** a sintaxe reconhecida pelo *lexer* do Tarmac — ela não valida se o
@@ -20,15 +21,16 @@ Reconhece os arquivos `.tm` e `.tarmac` e destaca:
 
 - Palavras-chave de controle: `if`, `else`, `while`, `return`
 - Declaração de função (`function`) — a palavra-chave e o nome definido (`function dobro(...)`)
-- Tipos: `string`, `char`, `int64`, `int`, `bool`, `float`, `buffer`
-- Literais: números inteiros e de ponto flutuante (`123`, `3.14`, com escopos separados), strings (`"texto"`, com escapes `\n`, `\t`, `\"`, `\\`), caracteres (`'a'`) e booleanos (`true`, `false`)
+- Tipos: `string`, `char`, `int64`, `int`, `bool`, `float`, `buffer` (este último ainda é reconhecido pelo *lexer* como palavra-chave, embora o *parser* atual não o consuma)
+- Literais: números inteiros e de ponto flutuante (`123`, `3.14`, com escopos separados), strings (`"texto"`, com escapes `\n`, `\t`, `\r`, `\0`, `\"`, `\'`, `\\` — o mesmo conjunto validado pelo *lexer*), caracteres (`'a'`, inclusive com escape: `'\n'`) e booleanos (`true`, `false`)
 - Comentários de linha (`// ...`)
-- Funções nativas do runtime, com escopo próprio (`print`, `atoi`, `read_buf`, `emit_note`, `mmap_alloc`, `mmap_free`, `brk_alloc`, `brk_free`), distintas de chamadas a funções do usuário
-- Chamadas de função e de método (`dobro(...)`, `buf.str()`), com o acessor `.` destacado
-- Operadores aritméticos (`+ - * /`), de comparação (`== < > <= >=`) e de atribuição (`=`)
-- Pontuação estrutural (`;`, `,`, `{`/`}`, `(`/`)`, `.`) com escopos próprios
+- Funções nativas do runtime, com escopo próprio (`print`, `atoi`, `len`, `emit_note`, `mmap_alloc`, `mmap_free`, `brk_alloc`, `brk_free`), distintas de chamadas a funções do usuário — `len` é um método (`nome.len()`)
+- Chamadas de função e de método (`dobro(...)`, `nome.len()`), com o acessor `.` destacado
+- Operadores aritméticos (`+ - * /`), de comparação (`== < > <= >=`), de atribuição (`=`) e as atribuições compostas (`+= -= *= /=`, com escopo próprio)
+- Arrays (novo na linguagem): colchetes do tamanho na declaração (`int[3] v`) e da indexação (`v[0]`) com escopos de pontuação próprios
+- Pontuação estrutural (`;`, `,`, `{`/`}`, `(`/`)`, `[`/`]`, `.`) com escopos próprios
 
-A gramática é mantida em sincronia com o que o *lexer* do compilador realmente aceita — construções que a linguagem ainda **não** tem (o laço `for`, o operador `%`, `&&`/`||`/`!`, literais hexadecimais etc.) não são destacadas, para não sugerir uma sintaxe que ainda não existe. Veja [`CONTRIBUTING.md`](CONTRIBUTING.md) para as armadilhas de ordenação de regex que valem atenção ao editar a gramática.
+A gramática é mantida em sincronia com o que o *lexer* do compilador realmente aceita — construções que a linguagem ainda **não** tem (o laço `for`, os operadores `%` e `!=`, `&&`/`||`/`!`, literais hexadecimais etc.) não são destacadas, para não sugerir uma sintaxe que ainda não existe. Veja [`CONTRIBUTING.md`](CONTRIBUTING.md) para as armadilhas de ordenação de regex que valem atenção ao editar a gramática.
 
 ## Instalação
 
@@ -41,7 +43,7 @@ Ainda não publicada. Quando sair, vai estar disponível em dois lugares (mesmo 
 
 ### Opção 2 — Instalar manualmente a partir de um `.vsix`
 
-Útil se você baixou o arquivo `.vsix` de uma [release no GitHub](https://github.com/gimmelovej/tarmac-syntaxes/releases) em vez de usar o Marketplace (troque `X.Y.Z` pela versão baixada — hoje `0.1.0`):
+Útil se você baixou o arquivo `.vsix` de uma [release no GitHub](https://github.com/gimmelovej/tarmac-syntaxes/releases) em vez de usar o Marketplace (troque `X.Y.Z` pela versão baixada — hoje `0.2.0`):
 
 ```bash
 code --install-extension tarmac-syntax-X.Y.Z.vsix

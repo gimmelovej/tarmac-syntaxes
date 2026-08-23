@@ -24,21 +24,24 @@
             ]
         },
         "strings": {
-            "comment": "end também para no fim da linha (lookahead \\n), não só em '\"' — evita que uma aspa esquecida enquanto o usuário digita vaze o escopo de string pelo resto do arquivo inteiro.",
+            "comment": "end também para no fim da linha (lookahead \\n), não só em '\"' — evita que uma aspa esquecida enquanto o usuário digita vaze o escopo de string pelo resto do arquivo inteiro. O conjunto de escapes espelha is_valid_escape no lexer do compilador: n t r 0 \\ \" '.",
             "name": "string.quoted.double.tarmac",
             "begin": "\"",
             "end": "\"|(?=\\n)",
             "patterns": [
                 {
                     "name": "constant.character.escape.tarmac",
-                    "match": "\\\\[nt\"\\\\]"
+                    "match": "\\\\[ntr0\"'\\\\]"
                 }
             ]
         },
         "characters": {
-            "comment": "literal de um único caractere entre aspas simples ('a'); o lexer aceita exatamente um caractere, sem escapes.",
+            "comment": "literal de caractere entre aspas simples: exatamente um caractere ('a') ou uma sequência de escape ('\\n'), como em scan_char no lexer. O grupo 1 destaca o escape com o mesmo escopo dos escapes de string.",
             "name": "string.quoted.single.tarmac",
-            "match": "'[^']'"
+            "match": "'(?:(\\\\[ntr0\"'\\\\])|[^'\\\\])'",
+            "captures": {
+                "1": { "name": "constant.character.escape.tarmac" }
+            }
         },
         "numbers": {
             "comment": "float precisa vir antes de integer: ambos casam no mesmo ponto de partida em '123.45', e o TextMate resolve empate de posição pela ordem no array, não pelo casamento mais longo — se integer viesse primeiro, cortaria a parte decimal.",
@@ -74,6 +77,7 @@
                     "match": "\\b(function)\\b"
                 },
                 {
+                    "comment": "'buffer' segue na lista porque o lexer ainda o reconhece como palavra-chave (KwBuffer), embora nenhuma regra do parser o consuma hoje — a promessa da extensão é espelhar o lexer.",
                     "name": "storage.type.tarmac",
                     "match": "\\b(string|char|int64|int|bool|float|buffer)\\b"
                 },
@@ -84,12 +88,12 @@
             ]
         },
         "builtins": {
-            "comment": "funções nativas do runtime (ver a FunctionTable do compilador). Destacadas com escopo próprio (support.function.builtin) e antes de #functions para se distinguirem de chamadas a funções definidas pelo usuário. O lookahead '(' garante que só o uso como chamada seja destacado.",
-            "match": "\\b(print|atoi|read_buf|emit_note|mmap_alloc|mmap_free|brk_alloc|brk_free)\\b(?=\\s*\\()",
+            "comment": "funções nativas do runtime (ver tarm_function_table_register_natives no compilador): print, atoi, emit_note, os pares de alocação mmap/brk e o método len ('nome.len()', receptor string). Destacadas com escopo próprio (support.function.builtin) e antes de #functions para se distinguirem de chamadas a funções definidas pelo usuário. O lookahead '(' garante que só o uso como chamada seja destacado.",
+            "match": "\\b(print|atoi|len|emit_note|mmap_alloc|mmap_free|brk_alloc|brk_free)\\b(?=\\s*\\()",
             "name": "support.function.builtin.tarmac"
         },
         "functions": {
-            "comment": "chamada de função ou método: <nome>( — inclui o nome de um método como em 'buf.str()' (o 'str', seguido de '('). Regra puramente léxica: destaca qualquer identificador seguido de '(', mesmo que não exista de fato; uma validação real exigiria um language server.",
+            "comment": "chamada de função ou método: <nome>( — inclui o nome de um método como em 'nome.len()' (o 'len', seguido de '('). Regra puramente léxica: destaca qualquer identificador seguido de '(', mesmo que não exista de fato; uma validação real exigiria um language server.",
             "match": "\\b([A-Za-z_][A-Za-z0-9_]*)\\s*(?=\\()",
             "name": "entity.name.function.call.tarmac"
         },
@@ -103,6 +107,11 @@
                     "comment": "operadores de 2 caracteres sempre antes dos de 1 — a alternância do Oniguruma testa em ordem de leitura e para no primeiro que casar, não no mais longo, então essa ordem não é cosmética.",
                     "name": "keyword.operator.comparison.tarmac",
                     "match": ">=|<=|==|<|>"
+                },
+                {
+                    "comment": "atribuições compostas (+= -= *= /=), açúcar que o parser desfaz em 'a = a + b'. Precisam vir antes dos aritméticos de 1 caractere pela mesma regra de ordem acima — senão o '+' de '+=' seria consumido sozinho.",
+                    "name": "keyword.operator.assignment.compound.tarmac",
+                    "match": "\\+=|-=|\\*=|/="
                 },
                 {
                     "name": "keyword.operator.assignment.tarmac",
@@ -144,6 +153,15 @@
                 {
                     "name": "punctuation.section.parens.end.tarmac",
                     "match": "\\)"
+                },
+                {
+                    "comment": "colchetes de array (novo na linguagem): tamanho na declaração ('int[3] v') e indexação ('v[0]', leitura e escrita).",
+                    "name": "punctuation.section.brackets.begin.tarmac",
+                    "match": "\\["
+                },
+                {
+                    "name": "punctuation.section.brackets.end.tarmac",
+                    "match": "\\]"
                 }
             ]
         }
